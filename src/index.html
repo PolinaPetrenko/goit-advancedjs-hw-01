@@ -3,38 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vanilla App Template</title>
+    <title>goit-advancedjs-hw-01</title>
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-    <main>
-      <section id="gallery"></section>
-      <section id="form"></section>
-    </main>
-
-    <script type="module">
-      const loadContent = async (filePath, containerId, scriptPath = null) => {
-        try {
-          const response = await fetch(filePath);
-          if (!response.ok)
-            throw new Error(`HTTP error! status: ${response.status}`);
-          const html = await response.text();
-          document.getElementById(containerId).innerHTML = html;
-
-          // Завантаження відповідного JS, якщо потрібно
-          if (scriptPath) {
-            await import(scriptPath);
-          }
-        } catch (error) {
-          console.error(`Error loading ${filePath}:`, error);
-        }
-      };
-
-      // Завантажуємо галерею
-      loadContent('./1-gallery.html', 'gallery', './js/1-gallery.js');
-
-      // Завантажуємо форму
-      loadContent('./2-form.html', 'form', './js/2-form.js');
-    </script>
-  </body>
+    <ul>
+      <li><a href="./1-gallery.html">Task 1 - Gallery</a></li>
+      <li><a href="./2-form.html">Task 2 - Form</a></li>
+    </ul>
 </html>
