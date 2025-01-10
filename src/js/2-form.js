@@ -1,17 +1,39 @@
 
 
-document.body.style.fontFamily = "'Montserrat', sans-serif";
+// Визначення необхідних елементів
 const form = document.querySelector("form");
 const labels = document.querySelectorAll("label");
 const input = document.querySelector("input");
 const textarea = document.querySelector("textarea");
-const submitButton = document.querySelector("button")
+const submitButton = document.querySelector("button");
 
+// Функція для завантаження даних із localStorage
+const load = (key) => {
+    try {
+        const serializedState = localStorage.getItem(key);
+        return serializedState === null ? undefined : JSON.parse(serializedState);
+    } catch (error) {
+        console.error("Load error: ", error);
+    }
+};
+
+// Функція для збереження даних у localStorage
+const save = (key, value) => {
+    try {
+        const serializedState = JSON.stringify(value);
+        localStorage.setItem(key, serializedState);
+    } catch (error) {
+        console.error("Save error: ", error);
+    }
+};
+
+// Початковий стан форми
 const formData = {
     email: '',
     message: '',
 };
 
+// Заповнення форми даними з localStorage
 const fillFormField = () => {
     const formDataFromLS = load('feedback-form-state');
 
@@ -26,11 +48,13 @@ const fillFormField = () => {
         formData[key] = formDataFromLS[key];
     });
 
-  console.log(formData);
+    console.log(formData);
 };
 
+// Виклик функції для заповнення форми при завантаженні сторінки
 fillFormField();
 
+// Обробка змін у полях форми
 const onFormFieldChange = event => {
     const { target: formField } = event;
 
@@ -42,16 +66,14 @@ const onFormFieldChange = event => {
     save('feedback-form-state', formData);
 };
 
+// Обробка відправки форми
 const onFeedbackFormSubmit = event => {
     event.preventDefault();
 
     const formDataValues = Object.values(formData);
 
     if (formDataValues.some(el => el === '')) {
-        iziToast.error({
-        message: 'Fill please all fields',
-        position: 'topRight',
-        });
+        console.error("Fill please all fields");
         return;
     }
     
@@ -61,9 +83,11 @@ const onFeedbackFormSubmit = event => {
     localStorage.removeItem('feedback-form-state');
 };
 
+// Додавання слухачів подій до форми
 form.addEventListener('input', onFormFieldChange);
 form.addEventListener('submit', onFeedbackFormSubmit);
 
+// Стилізація форми
 form.style.display = "inline-flex";
 form.style.padding = "24px";
 form.style.flexDirection = "column";
@@ -71,6 +95,7 @@ form.style.gap = "8px";
 form.style.borderRadius = "8px";
 form.style.background = "#fff";
 
+// Стилізація міток
 labels.forEach(label => {
     label.style.display = "flex";
     label.style.flexDirection = "column";
@@ -82,8 +107,9 @@ labels.forEach(label => {
     label.style.fontWeight = "400";
     label.style.lineHeight = "24px";
     label.style.letterSpacing = "0.64px";
-})
+});
 
+// Стилізація поля вводу
 input.style.outline = "none";
 input.style.width = "360px";
 input.style.height = "40px";
@@ -92,6 +118,7 @@ input.style.border = "1px solid #808080";
 input.style.padding = "8px 16px";
 input.style.fontFamily = "'Montserrat', sans-serif";
 
+// Стилізація текстової області
 textarea.style.outline = "none";
 textarea.style.width = "360px";
 textarea.style.height = "80px";
@@ -100,6 +127,7 @@ textarea.style.border = "1px solid #808080";
 textarea.style.padding = "8px 16px";
 textarea.style.fontFamily = "'Montserrat', sans-serif";
 
+// Події наведення на поле вводу
 input.addEventListener("mouseenter", () => {
     input.style.border = "1px solid #000";
 });
@@ -107,6 +135,7 @@ input.addEventListener("mouseleave", () => {
     input.style.border = "1px solid #808080";
 });
 
+// Події наведення на текстову область
 textarea.addEventListener("mouseenter", () => {
     textarea.style.border = "1px solid #000";
 });
@@ -114,6 +143,7 @@ textarea.addEventListener("mouseleave", () => {
     textarea.style.border = "1px solid #808080";
 });
 
+// Стилізація кнопки
 submitButton.style.outline = "none";
 submitButton.style.marginTop = "8px";
 submitButton.style.width = "86px";
@@ -133,6 +163,7 @@ submitButton.style.fontWeight = "500";
 submitButton.style.lineHeight = "24px";
 submitButton.style.letterSpacing = "0.64px";
 
+// Події наведення на кнопку
 submitButton.addEventListener("mouseenter", () => {
     submitButton.style.background = "#6C8CFF";
 });
