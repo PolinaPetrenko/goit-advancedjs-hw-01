@@ -1,13 +1,10 @@
 
-
-// Визначення необхідних елементів
 const form = document.querySelector("form");
 const labels = document.querySelectorAll("label");
 const input = document.querySelector("input");
 const textarea = document.querySelector("textarea");
 const submitButton = document.querySelector("button");
 
-// Функція для завантаження даних із localStorage
 const load = (key) => {
     try {
         const serializedState = localStorage.getItem(key);
@@ -28,7 +25,7 @@ const save = (key, value) => {
 };
 
 // Початковий стан форми
-const formData = {
+let formData = {
     email: '',
     message: '',
 };
@@ -43,19 +40,19 @@ const fillFormField = () => {
 
     const formDataFromLSKeys = Object.keys(formDataFromLS);
 
-    formDataFromLSKeys.forEach(key => {
-        form.elements[key].value = formDataFromLS[key];
-        formData[key] = formDataFromLS[key];
+    formDataFromLSKeys.forEach((key) => {
+        if (formDataFromLS[key]) {
+            form.elements[key].value = formDataFromLS[key];
+            formData[key] = formDataFromLS[key];
+        }
     });
-
-    console.log(formData);
 };
 
 // Виклик функції для заповнення форми при завантаженні сторінки
 fillFormField();
 
 // Обробка змін у полях форми
-const onFormFieldChange = event => {
+const onFormFieldChange = (event) => {
     const { target: formField } = event;
 
     const fieldName = formField.name;
@@ -67,20 +64,23 @@ const onFormFieldChange = event => {
 };
 
 // Обробка відправки форми
-const onFeedbackFormSubmit = event => {
+const onFeedbackFormSubmit = (event) => {
     event.preventDefault();
 
+    // Перевіряємо, чи всі поля заповнені
     const formDataValues = Object.values(formData);
 
-    if (formDataValues.some(el => el === '')) {
-        console.error("Fill please all fields");
+    if (formDataValues.some((el) => el === '')) {
+        alert("Fill please all fields"); // Використовуємо alert замість помилок у консоль
         return;
     }
-    
-    console.log(formData);
 
+    console.log(formData); // Виводимо повністю заповнені дані
+
+    // Скидання форми та очищення збережених даних
     event.currentTarget.reset();
     localStorage.removeItem('feedback-form-state');
+    formData = { email: '', message: '' }; // Повністю очищаємо об'єкт formData
 };
 
 // Додавання слухачів подій до форми
@@ -96,7 +96,7 @@ form.style.borderRadius = "8px";
 form.style.background = "#fff";
 
 // Стилізація міток
-labels.forEach(label => {
+labels.forEach((label) => {
     label.style.display = "flex";
     label.style.flexDirection = "column";
     label.style.gap = "8px";
